@@ -1,0 +1,11 @@
+{
+  "availability-zones:account=053141519842:region=ap-northeast-1": [
+    "ap-northeast-1a",
+    "ap-northeast-1c",
+    "ap-northeast-1d"
+  ],
+  "hosted-zone:account=053141519842:domainName=asanoharuki.classmethod.info:region=ap-northeast-1": {
+    "Id": "/hostedzone/Z10297952QAXA2MXJNMHI",
+    "Name": "asanoharuki.classmethod.info."
+  }
+}
