@@ -9,6 +9,7 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as targets from 'aws-cdk-lib/aws-elasticloadbalancingv2-targets';
 import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -112,10 +113,10 @@ export class DemoSelfManagedGitlabStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    // CloudWatch Logsへの書き込み権限を追加
     role.addToPolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
+        'logs:CreateLogGroup',
         'logs:CreateLogStream',
         'logs:PutLogEvents',
         'logs:DescribeLogStreams',
@@ -123,6 +124,16 @@ export class DemoSelfManagedGitlabStack extends cdk.Stack {
       ],
       resources: [this.logGroup.logGroupArn + '*'],
     }));
+
+    role.addToPolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: [
+        'ec2:DescribeVolumes',
+        'ec2:DescribeTags',
+      ],
+      resources: ['*'],
+    }));
+
 
     // SSL証明書の作成（Route53ドメイン検証）
     if (!props.skipRoute53) {
@@ -192,10 +203,10 @@ export class DemoSelfManagedGitlabStack extends cdk.Stack {
         path: '/-/health',
         protocol: elbv2.Protocol.HTTP,
         healthyHttpCodes: '200',
-        interval: cdk.Duration.seconds(30),
-        timeout: cdk.Duration.seconds(5),
+        interval: cdk.Duration.seconds(60),
+        timeout: cdk.Duration.seconds(10),
         healthyThresholdCount: 2,
-        unhealthyThresholdCount: 5,
+        unhealthyThresholdCount: 10,
       },
     });
 
