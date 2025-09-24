@@ -4,7 +4,7 @@
 
 ## アーキテクチャ構成図
 
-![GitLab AWS Architecture](./docs/architecture.png)
+<img width="905" height="611" alt="01" src="https://github.com/user-attachments/assets/ba5c204f-a625-4de2-a4cb-6f772fffba59" />
 
 ## 機能
 
